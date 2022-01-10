@@ -23,5 +23,5 @@ app.use('/api/notes',require('./routes/notes'))
 //   })
 
 app.listen(process.env.PORT || 5000, () => {
-  console.log(`Example app listening at http://localhost:${port}`)
+  console.log(`Example app listening at http://localhost:5000`)
 })
