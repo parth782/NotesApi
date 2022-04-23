@@ -14,6 +14,10 @@ const NotesSchema= new Schema({
        default:"general",
         type:String
     },
+    color:{
+        type:String,
+        default:"white"
+    },
     date:{
         
         type:Date,
@@ -22,7 +26,8 @@ const NotesSchema= new Schema({
     user:{
         type:mongoose.Schema.Types.ObjectId,
         required:true
-    }
+    },
+    
 
 
 });

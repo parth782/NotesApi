@@ -7,6 +7,7 @@ var cors = require('cors')
 connecttomongo();
 const app = express()
 
+
 app.use(cors())
 app.use(express.json())
 

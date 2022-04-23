@@ -10,13 +10,13 @@ router.get('/getallnotes', fetchuser, async (req, res) => {
 })
 router.post('/addnote', body('title', 'Enter a Valid Title').isLength({ min: 5 }), body('description', 'Enter at least 5 characters in description').isLength({ min: 10 }), fetchuser, async (req, res) => {
      try {
-          const { title, description, tag } = req.body;
+          const { title, description, tag ,color} = req.body;
           const errors = validationResult(req);
           if (!errors.isEmpty()) {
                return res.status(400).json({ errors: errors.array() });
           }
           const notes = new Notes({
-               title, description, tag, user: req.user.id
+               title, color,description, tag, user: req.user.id
           })
           const savenote = await notes.save();
           res.status(200).json(savenote)
@@ -27,11 +27,12 @@ router.post('/addnote', body('title', 'Enter a Valid Title').isLength({ min: 5 }
 })
 router.put('/updatenote/:id', fetchuser, async (req, res) => {
      try {
-          const { title, description, tag } = req.body;
+          const { title, description, tag,color } = req.body;
           const newnote = {};
           if (title) { newnote.title = title }
           if (description) { newnote.description = description }
-          if (description) { newnote.tag = tag }
+          if (tag) { newnote.tag = tag }
+          if(color){newnote.color=color}
 
           //Find the note to be updated
           let note = await Notes.findById(req.params.id)
