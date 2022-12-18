@@ -26,6 +26,7 @@ router.post('/createuser', body('name').isLength({ min: 5 }), body('password').i
     //console.log(req.body);
     //Check for email
     try {
+      
       //findone is promise so we need to use await otherwise always email id exists
       let user = await User.findOne({ email: req.body.email });
       if (user) {
@@ -46,11 +47,11 @@ router.post('/createuser', body('name').isLength({ min: 5 }), body('password').i
         }
       }
       const authtoken = jwt.sign(data, JWT_SECRET);
-
+      
       res.json({ authtoken });
-    } catch {
-      console.log(errors.message);
-      res.status(500).json({ error: errors.message })
+    } catch(err){
+      console.log(err);
+      res.status(500).json({ error: err})
     }
     // .then(user => res.json(user)).catch(err=>{
     //   res.json({message:err.message});
