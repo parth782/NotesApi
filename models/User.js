@@ -18,10 +18,14 @@ const UserSchema= new Schema({
         
         type:Date,
         default:Date.now
+    },
+    isAdmin:{
+        type:Boolean,
+        default:false
     }
 
 
-});
+},{timestamps:true});
 const User=mongoose.model('user',UserSchema)
 // User.createIndexes();
 module.exports=User
