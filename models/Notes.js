@@ -15,7 +15,6 @@ const NotesSchema = new Schema({
         enum: ["Pending", "Completed"]
     },
     date: {
-
         type: Date,
         default: Date.now
     },
