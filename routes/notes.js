@@ -9,7 +9,7 @@ router.get('/getallnotes', fetchuser, async (req, res) => {
 })
 router.post('/addnote', body('title', 'Enter a Valid Title').isLength({ min: 5 }), body('description', 'Enter at least 5 characters in description').isLength({ min: 10 }), fetchuser, async (req, res) => {
      try {
-          const { title, description, tag, color } = req.body;
+          const { title, description, tag } = req.body;
 
           const errors = validationResult(req);
           if (!errors.isEmpty()) {
@@ -19,7 +19,7 @@ router.post('/addnote', body('title', 'Enter a Valid Title').isLength({ min: 5 }
                return res.status(400).json({ errors: "Tag can be either Pending or Completed" });
           }
           const notes = new Notes({
-               title, color, description, tag, user: req.user.id
+               title, description, tag, user: req.user.id
           })
           const savenote = await notes.save();
           res.status(200).json(savenote)
@@ -30,7 +30,7 @@ router.post('/addnote', body('title', 'Enter a Valid Title').isLength({ min: 5 }
 })
 router.put('/updatenote/:id', fetchuser, async (req, res) => {
      try {
-          const { title, description, tag, color } = req.body;
+          const { title, description, tag} = req.body;
 
           if (tag !== "Pending" && tag !== "Completed") {
                return res.status(400).json({ errors: "Tag can be either Pending or Completed" });
