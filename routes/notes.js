@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const Notes = require('../models/Notes');
 const { body, validationResult } = require('express-validator');
-const { checkSchema } = require('express-validator');
 var fetchuser = require('../middlewares/fetchuser')
 router.get('/getallnotes', fetchuser, async (req, res) => {
      const notes = await Notes.find({ user: req.user.id })
@@ -11,9 +10,13 @@ router.get('/getallnotes', fetchuser, async (req, res) => {
 router.post('/addnote', body('title', 'Enter a Valid Title').isLength({ min: 5 }), body('description', 'Enter at least 5 characters in description').isLength({ min: 10 }), fetchuser, async (req, res) => {
      try {
           const { title, description, tag, color } = req.body;
+
           const errors = validationResult(req);
           if (!errors.isEmpty()) {
                return res.status(400).json({ errors: errors.array() });
+          }
+          if (tag !== "Pending" && tag !== "Completed") {
+               return res.status(400).json({ errors: "Tag can be either Pending or Completed" });
           }
           const notes = new Notes({
                title, color, description, tag, user: req.user.id
@@ -28,18 +31,20 @@ router.post('/addnote', body('title', 'Enter a Valid Title').isLength({ min: 5 }
 router.put('/updatenote/:id', fetchuser, async (req, res) => {
      try {
           const { title, description, tag, color } = req.body;
-          const newnote = {};
-          if (title) { newnote.title = title }
-          if (description) { newnote.description = description }
-          if (tag) { newnote.tag = tag }
-          if (color) { newnote.color = color }
 
-          //Find the note to be updated
-          let note = await Notes.findById(req.params.id)
+          if (tag !== "Pending" && tag !== "Completed") {
+               return res.status(400).json({ errors: "Tag can be either Pending or Completed" });
+          }
+          let note = await Notes.findById(req.params.id);
           if (!note) { res.status(404).send("Not Found") }
           if (note.user.toString() != req.user.id) {
-               res.status(401).send("Login to edit notes")
+               res.status(401).send("Login to edit notes");
           }
+          const newnote = {};
+          newnote.title = title;
+          newnote.description = description;
+          newnote.tag = tag
+          //Find the note to be updated
           note = await Notes.findByIdAndUpdate(req.params.id, { $set: newnote }, { new: true })
           res.json({
                "status": 1,

@@ -2,11 +2,10 @@ const express = require('express');
 const User = require('../models/User');
 const router = express.Router();
 const { body, validationResult } = require('express-validator');
-const { checkSchema } = require('express-validator');
 const bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken');
-const JWT_SECRET = 'Parth is good boy'
 var fetchuser = require('../middlewares/fetchuser')
+require("dotenv").config()
 
 
 
@@ -46,7 +45,7 @@ router.post('/createuser', body('name').isLength({ min: 5 }), body('password').i
           id: user.id
         }
       }
-      const authtoken = jwt.sign(data, JWT_SECRET);
+      const authtoken = jwt.sign(data, process.env.JWT_SECRET);
       
       res.json({ authtoken });
     } catch(err){
@@ -86,7 +85,7 @@ router.post('/login', body('email').isEmail(), body('password', 'Password cannot
         id: user.id
       }
     }
-    const authtoken = jwt.sign(payload, JWT_SECRET)
+    const authtoken = jwt.sign(payload, process.env.JWT_SECRET)
     res.json({ authtoken });
   } catch (errors) {
     res.status(500).send("Some Error Occured")
