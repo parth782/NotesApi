@@ -12,7 +12,7 @@ app.use(express.json())
 app.get('/', (req, res) => {
   res.status(200).send({
     uptime: process.uptime(),
-    message: 'Welcome to KrishiMarket',
+    message: 'Welcome to Notes Application',
     timestamp: Date.now(),
 
   });
