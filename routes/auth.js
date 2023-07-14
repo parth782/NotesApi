@@ -17,7 +17,7 @@ router.post('/createuser', body('name').isLength({ min: 5 }), body('password').i
     //validator fails errors display
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+      return res.status(422).json({ errors: errors.array() });
     }
     //console.log(req.body);
     //Check for email
@@ -61,10 +61,10 @@ router.post('/createuser', body('name').isLength({ min: 5 }), body('password').i
   })
 //login route
 
-router.post('/login', body('email').isEmail(), body('password', 'Password cannot be blank').exists(), async (req, res) => {
+router.post('/login', body('email').isEmail(), body('password', 'Password cannot be blank').exists().isLength({min:8}), async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.status(500).json({ errors: errors.array() });
+    return res.status(422).json({ errors: errors.array() });
   }
   const { email, password } = req.body;
   try {
