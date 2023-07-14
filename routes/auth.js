@@ -8,9 +8,6 @@ var fetchuser = require('../middlewares/fetchuser')
 require("dotenv").config()
 
 
-
-
-
 //Create user using post on /api/auth.Doesnt require auth
 
 router.post('/createuser', body('name').isLength({ min: 5 }), body('password').isLength({ min: 8 }),
@@ -92,6 +89,7 @@ router.post('/login', body('email').isEmail(), body('password', 'Password cannot
   }
 
 });
+
 //loggedin user details get
 router.get('/getuser', fetchuser, async (req, res) => {
 
